@@ -1,109 +1,63 @@
-This repository contains the source code used in the research paper "Development of an Evacuation Transport Model for Residents in Need of Assistance in Evacuation during Nuclear Disasters".
+# Evacuation Transport Optimization for Assisted Residents during Nuclear Disasters
 
-Two main optimization approaches are implemented in this repository:
-1. Exact optimization using the Gurobi solver
-2. Heuristic optimization using a Genetic Algorithm (GA)
+Source Code for the Paper:  
+Development of an Evacuation Transport Model for Residents in Need of Assistance in Evacuation during Nuclear Disasters”
 
-■ Optimization using Gurobi
+This repository contains the source code used in the above research paper.
 
-[Target Directory]
-20250511_elevationXXm_gurubi_client12m/
-(* Replace XX with the elevation threshold in meters. For example, elevation6m means roads below 6m are excluded.)
+## Overview
 
-[Steps]
+This project builds a Capacitated Vehicle Routing Problem (CVRP) model for transporting assisted residents (e.g., elderly, disabled) under nuclear disaster scenarios.  
+Geographic data and elevation thresholds are used to construct feasible road networks for evacuation.
 
-1. Run the script `CVRP_Geography_v7.py` in the Geography folder.
+### Features
 
-This script filters out roads below the specified elevation, creating a road network and travel-time matrix suitable for evacuation planning.
+- Uses OpenStreetMap and official elevation data
+- Implements two optimization methods:
+  1. Exact optimization using the Gurobi Solver
+  2. Heuristic optimization using a Genetic Algorithm (GA)
 
-Example: To include only areas at or above 6 meters
-(Python code)
+## Gurobi Optimization
 
-```python
-elev = 6
-geo.get_filtered_road_network(output_file=f"omaezaki_≤{elev}melev.graphml", elev=elev, nrate=0.5)
-print('Network recreated', time.time() - start)
-```
+### Target Directory  
+`20250511_elevationXXm_gurubi_client12m/`  
+(Replace `XX` with the elevation threshold in meters. For example: `elevation6m` excludes roads below 6 meters.)
 
-2. Run the script `CVRP_gurobi_3d_v2.py` in the Optimization folder.
+### Steps
 
-This script uses the preprocessed road network and travel-time matrix to optimize the evacuation plan using the Gurobi solver.
+1. Run the script `CVRP_Geography_v7.py` in the `Geography/` folder.
 
-■ Optimization using Genetic Algorithm (GA)
+   This script filters roads below the specified elevation and generates a road network and travel-time matrix.
 
-[Target Directory]
-20250417_elevation0m_npop500_ngen30000/
-(* GA is applied only for the case with no elevation restriction: elevation = 0m)
+   Example: include areas at or above 6 meters
 
-[Steps]
+   ```python
+   elev = 6
+   geo.get_filtered_road_network(output_file=f"omaezaki_≤{elev}melev.graphml", elev=elev, nrate=0.5)
+   print('Network recreated', time.time() - start)
+   ```
 
-1. Run `CVRP_Geography_v7.py` in the Geography folder (same as Gurobi procedure).
+2. Run the script `CVRP_gurobi_3d_v2.py` in the `Optimization/` folder.
 
-2. Run `CVRP_Calculation_3d_v2.py` in the Optimization folder.
+   This script optimizes the evacuation plan using the Gurobi solver based on the generated data.
 
-This script applies a Genetic Algorithm to iteratively search for optimized evacuation routes.
+## Genetic Algorithm Optimization
 
-■ Notes
+### Target Directory  
+`20250417_elevation0m_npop500_ngen30000/`  
+(GA is only applied to the case with elevation = 0m)
 
-- Geographic data is based on OpenStreetMap and elevation data sources.
+### Steps
+
+1. Run the script `CVRP_Geography_v7.py` in the `Geography/` folder.
+
+2. Run the script `CVRP_Calculation_3d_v2.py` in the `Optimization/` folder.
+
+   This script uses a Genetic Algorithm to search for optimized evacuation routes.
+
+## Notes
+
+- Geographic data is based on OpenStreetMap and elevation sources.
 - The optimization model is formulated as a Capacitated Vehicle Routing Problem (CVRP).
-- To reproduce the results, a Python environment and Gurobi installation are required.
-　Gurobi requires a valid license to run.
-
----
-
-
-このリポジトリは、論文「Development of an Evacuation Transport Model for Residents in Need of Assistance in Evacuation during Nuclear Disaster*」において用いた避難支援者搬送計画モデルのソースコード一式です。
-本研究では、災害時における要支援者の避難支援を目的とし、制限高度を考慮した地理情報をもとに、搬送ルートを最適化する数理モデルを構築しています。
-
-本コードでは、次の2種類の最適化手法を用いて実験を行っています。
-1. 数理最適化ソルバー「Gurobi」による厳密解法
-2. 遺伝的アルゴリズム（GA）による近似解法
-
-■ Gurobi による最適化手法
-
-【対象ディレクトリ】
-20250511_elevationXXm_gurubi_client12m/
-※ XX には制限高度（メートル単位）が入ります（例：elevation6m）
-
-【手順】
-
-1. Geography フォルダのスクリプト `CVRP_Geography_v7.py` を実行
-
-このスクリプトでは、指定された高度よりも低い領域を地図から除外し、
-現実的な避難ルート用ネットワークおよび時間マトリクスを作成します。
-
-例：6m以上の地域のみ対象とする設定
-（以下、Pythonコード）
-
-```python
-elev = 6
-geo.get_filtered_road_network(output_file=f"omaezaki_≤{elev}melev.graphml", elev=elev, nrate=0.5)
-print('ネットワーク再作成', time.time() - start)
-```
-
-2. Optimization フォルダ内の `CVRP_gurobi_3d_v2.py` を実行
-
-このスクリプトでは、上記で作成された地図および時間マトリクスを用いて、
-Gurobi により搬送計画（CVRP）の最適化を行います。
-
-■ GA（遺伝的アルゴリズム）による最適化手法
-
-【対象ディレクトリ】
-20250417_elevation0m_npop500_ngen30000/
-※ GAは elevation=0m のケースのみ対応しています。
-
-【手順】
-
-1. Geography フォルダの `CVRP_Geography_v7.py` を実行（上記と同様）
-
-2. Optimization フォルダの `CVRP_Calculation_3d_v2.py` を実行
-
-このスクリプトでは、GAにより進化的に最適なルートを探索します。
-
-■ 備考
-
-・地理情報の取得・処理には OpenStreetMap のオープンデータを使用しています。
-・最適化問題は Capacitated Vehicle Routing Problem（CVRP）として定式化されています。
-・研究の再現には Python 環境および Gurobi の導入が必要です。
-　Gurobi の実行にはライセンスが必要です。
+- To reproduce results, a Python environment and Gurobi installation are required.
+  A valid Gurobi license is necessary.
